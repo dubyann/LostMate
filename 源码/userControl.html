@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户管理界面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: beige;
+            font-size: 20px;
+        }
+
+        .container {
+            width: 80%;
+            margin: 50px auto;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .header {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .table th {
+            background-color: #f1f1f1;
+        }
+
+        .table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .action-buttons button {
+            padding: 8px 12px;
+            margin-right: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .freeze-button {
+            background-color: #ffc107;
+            color: #fff;
+            
+        }
+
+        .ban-button {
+            background-color: #dc3545;
+            color: #fff;
+            
+        }
+
+        .freeze-button:hover,
+        .ban-button:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            用户管理界面
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>用户头像</th>
+                    <th>用户名</th>
+                    <th>注册时间</th>
+                    <th>用户状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><img src="images/avatar.png" alt="Avatar" class="user-avatar"></td>
+                    <td>用户1</td>
+                    <td>2024-01-01</td>
+                    <td>封禁</td>
+                    <td class="action-buttons">
+                        <button class="freeze-button">冻结</button>
+                        <button class="ban-button">封禁</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td><img src="images/h1.jpg" alt="Avatar" class="user-avatar"></td>
+                    <td>用户2</td>
+                    <td>2024-02-01</td>
+                    <td>正常</td>
+                    <td class="action-buttons">
+                        <button class="freeze-button">冻结</button>
+                        <button class="ban-button">封禁</button>
+                    </td>
+                </tr>
+                <!-- 继续添加用户行 -->
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

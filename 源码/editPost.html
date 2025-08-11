@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>编辑帖子</title>
+    <!-- 引入 Quill CSS -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: beige;
+            margin: 0;
+            padding: 0px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: whitesmoke;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 800px;
+            border-radius: 8px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-group .ql-container {
+            height: 200px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+
+        .form-group button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .form-group button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>编辑帖子</h2>
+        <form id="postForm">
+            <div class="form-group">
+                <label for="title">标题</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+            <div class="form-group">
+                <label for="image">上传图片</label>
+                <input type="file" id="image" name="image" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label for="category">类别</label>
+                <select id="category" name="category" required>
+                    <option value="">请选择类别</option>
+                    <option value="friends">交友组局</option>
+                    <option value="lost">失物招领</option>
+                    <option value="trade">二手交易</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="content">正文</label>
+                <div id="editor"></div>
+            </div>
+            <div class="form-group">
+                <button type="submit">修改</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- 引入 Quill JS -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script>
+        // 初始化 Quill 编辑器
+        var quill = new Quill('#editor', {
+            theme: 'snow'
+        });
+
+        // 提交表单时处理
+        document.getElementById('postForm').onsubmit = function (event) {
+            event.preventDefault();
+
+            // 获取表单数据
+            var title = document.getElementById('title').value;
+            var category = document.getElementById('category').value;
+            var content = quill.root.innerHTML; // 获取 Quill 编辑器内容
+            var image = document.getElementById('image').files[0]; // 获取上传的图片
+
+            // 创建 FormData 对象
+            var formData = new FormData();
+            formData.append('title', title);
+            formData.append('category', category);
+            formData.append('content', content);
+            if (image) {
+                formData.append('image', image);
+            }
+
+            // 打印到控制台（可以替换为实际的提交逻辑）
+            console.log('标题:', title);
+            console.log('类别:', category);
+            console.log('正文:', content);
+            console.log('图片:', image);
+
+            // 提交表单逻辑（如 AJAX 请求）
+            // 使用 fetch 提交表单数据（示例）
+            fetch('/your-api-endpoint', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('成功:', data);
+                    // 处理成功响应
+                })
+                .catch(error => {
+                    console.error('错误:', error);
+                    // 处理错误响应
+                });
+        };
+    </script>
+</body>
+
+</html>

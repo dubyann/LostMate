@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>帖子管理系统</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            font-size: 30px;
+            background-color:beige;
+        }
+
+        .navbar {
+            background-color:rgb(101,172,105);
+            color: #fff;
+            padding: 25px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .navbar .search-container {
+            justify-content: center;
+            font-size: 35px;
+            text-align: right;
+            flex-grow: 1;
+
+            width: 200px;
+            height: 50px;
+        }
+        #category-select,#search-input,#search_btn{
+            font-size: 20px;
+        }
+
+        .navbar select,
+        .navbar input[type="text"],
+        .navbar button {
+            margin: 0 5px;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .navbar select {
+            background-color: #fff;
+            color: #333;
+        }
+
+        .navbar input[type="text"] {
+            flex-grow: 1;
+            background-color: #fff;
+            color: #333;
+            padding-left: 30px;
+            /* 为放大镜预留空间 */
+            background-image: url('https://via.placeholder.com/16');
+            /* 放大镜图标 URL */
+            background-repeat: no-repeat;
+            background-position: 5px center;
+        }
+
+        .navbar button {
+            background-color: #fff;
+            color: #007BFF;
+            cursor: pointer;
+        }
+
+        .navbar button:hover {
+            background-color:darkcyan;
+            color: #fff;
+        }
+
+        .sidebar {
+            background-color:whitesmoke;
+            width: 200px;
+            padding: 20px;
+            box-sizing: border-box;
+            flex-shrink: 0;
+            border-right: 1px solid #ddd;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 10px;
+            color: #333;
+            text-decoration: none;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background-color:darkcyan;
+            color: #fff;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .post-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .post-card {
+            width: 600px; /* 你可以根据需要调整宽度 */
+            height: 450px; /* 你可以根据需要调整高度 */
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .post-card img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+        }
+
+        .post-card .post-title {
+            padding: 10px;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .pagination-info {
+            margin: 0 10px;
+        }
+
+        .pagination button {
+            font-size: 20px;
+            padding: 10px 15px;
+            border: none;
+            background-color:cadetblue;
+            color: #fff;
+            cursor: pointer;
+            margin: 0 5px;
+            border-radius: 5px;
+        }
+        
+
+        .pagination button:hover {
+            background-color:darkcyan;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <div>缘物校园</div>
+        <div class="search-container">
+            <select id="category-select">
+                <option value="friends">交友组局</option>
+                <option value="lost">失物招领</option>
+                <option value="trade">二手交易</option>
+            </select>
+            <input type="text" id="search-input" placeholder="搜索帖子...">
+            <button onclick="searchPosts() " id="search_btn">搜索</button>
+        </div>
+        
+    </div>
+    <div style="display: flex; flex-grow: 1;">
+        <div class="sidebar">
+            <a href="#" class="active" onclick="showPosts('home', this)">首页</a>
+            <a href="#" onclick="showPosts('friends', this)">交友组局</a>
+            <a href="#" onclick="showPosts('lost', this)">失物招领</a>
+            <a href="#" onclick="showPosts('trade', this)">二手交易</a>
+            <a href="#" onclick="showPosts('profile', this)">个人中心</a>
+        </div>
+        <div class="main-content" id="main-content">
+            <!-- 帖子块将被动态插入 -->
+        </div>
+    </div>
+    
+</body>>
+<script>
+    const posts = {
+        home: [
+            { id: 1, title: '首页帖子1', image: 'images/a.jpg' },
+            { id: 2, title: '首页帖子2', image: 'images/b.jpg' },
+            { id: 3, title: '首页帖子3', image: 'images/c.jpg' },
+            { id: 4, title: '首页帖子4', image: 'images/d.jpg' },
+            { id: 5, title: '首页帖子5', image: 'images/e.jpg' },
+            { id: 6, title: '首页帖子6', image: 'images/f.jpg' },
+            { id: 7, title: '首页帖子7', image: 'images/03.jpg' }
+        ],
+        friends: [
+            { id: 1, title: '交友组局帖子1', image: 'https://via.placeholder.com/300x150' },
+            { id: 2, title: '交友组局帖子2', image: 'https://via.placeholder.com/300x150' }
+        ],
+        lost: [
+            { id: 1, title: '失物招领帖子1', image: 'https://via.placeholder.com/300x150' },
+            { id: 2, title: '失物招领帖子2', image: 'https://via.placeholder.com/300x150' }
+        ],
+        trade: [
+            { id: 1, title: '二手交易帖子1', image: 'https://via.placeholder.com/300x150' },
+            { id: 2, title: '二手交易帖子2', image: 'https://via.placeholder.com/300x150' }
+        ],
+        profile: []
+    };
+
+    let currentPage = 1;
+    let currentCategory = 'home';
+
+    function showPosts(category, element) {
+        // 更新当前类别和页码
+        currentCategory = category;
+        currentPage = 1;
+
+        // 更新侧边栏高亮
+        document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+        element.classList.add('active');
+
+        updatePosts();
+    }
+
+    function updatePosts() {
+        const mainContent = document.getElementById('main-content');
+        mainContent.innerHTML = '';
+
+        const postGrid = document.createElement('div');
+        postGrid.className = 'post-grid';
+
+        const start = (currentPage - 1) * 6;
+        const end = start + 6;
+        const currentPosts = posts[currentCategory].slice(start, end);
+
+        currentPosts.forEach(post => {
+            const postCard = document.createElement('div');
+            postCard.className = 'post-card';
+
+            const postImage = document.createElement('img');
+            postImage.src = post.image;
+            postCard.appendChild(postImage);
+
+            const postTitle = document.createElement('div');
+            postTitle.className = 'post-title';
+            postTitle.textContent = post.title;
+            postCard.appendChild(postTitle);
+
+            postGrid.appendChild(postCard);
+        });
+
+        mainContent.appendChild(postGrid);
+
+        // 添加分页按钮
+        if (posts[currentCategory].length > 6) {
+            const pagination = document.createElement('div');
+            pagination.className = 'pagination';
+
+            const totalPages = Math.ceil(posts[currentCategory].length / 6);
+            const paginationInfo = document.createElement('div');
+            paginationInfo.className = 'pagination-info';
+            paginationInfo.textContent = `第 ${currentPage} 页 / 共 ${totalPages} 页`;
+            pagination.appendChild(paginationInfo);
+
+            const prevButton = document.createElement('button');
+            prevButton.textContent = '上一页';
+            prevButton.onclick = () => changePage('prev');
+            pagination.appendChild(prevButton);
+
+            const nextButton = document.createElement('button');
+            nextButton.textContent = '下一页';
+            nextButton.onclick = () => changePage('next');
+            pagination.appendChild(nextButton);
+
+            mainContent.appendChild(pagination);
+        }
+    }
+
+    function changePage(direction) {
+        const totalPages = Math.ceil(posts[currentCategory].length / 6);
+
+        if (direction === 'prev' && currentPage > 1) {
+            currentPage--;
+        } else if (direction === 'next' && currentPage < totalPages) {
+            currentPage++;
+        }
+
+        updatePosts();
+    }
+
+    function searchPosts() {
+        const category = document.getElementById('category-select').value;
+        const searchTerm = document.getElementById('search-input').value.toLowerCase();
+
+        // 过滤帖子
+        const filteredPosts = posts[category].filter(post => post.title.toLowerCase().includes(searchTerm));
+
+        // 更新当前类别和页码
+        currentCategory = category;
+        currentPage = 1;
+
+        // 临时替换当前类别的帖子
+        posts[currentCategory + '-filtered'] = filteredPosts;
+        posts[currentCategory] = filteredPosts;
+
+        updatePosts();
+
+        // 恢复原始数据
+        setTimeout(() => {
+            posts[currentCategory] = posts[currentCategory + '-filtered'];
+        }, 0);
+    }
+
+    // 默认显示首页
+    showPosts('home', document.querySelector('.sidebar a.active'));
+</script>
+
+</html>
